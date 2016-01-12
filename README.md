@@ -2,6 +2,10 @@
 
 ### 仓库说明
 
+#### 2016-1-12
+
+1.前几天在替换喜马拉雅SDK的时候，AFNetworking中的一个类AFURLConnectionOperation或者（AFHttpClient）中有一个Block，第一个参数是，id类型的一个形参，它调了一个 isFinished 的方法 Multible methods miss match isFinished 我选中isFinished方法，点击右键，发现有两个类方法冲突，一个是XMAlbum,一个就是当前类本身，显然这个AF和喜马拉雅的网络请求产生了冲突。找遍了百度、stackOverFlow，也没找到问题在哪，问了下永何，它的AF比较新，我的是比较老的。他的没报这个问题，于是我试着替换一下第三方库。等换好了以后发现，新的第三方库是没有这个AFHttpClient这个类的，而我的所有的网络请求类都是直接或者间接的继承于这个类，这意味着我要把这些所有的网络请求都废除掉，取用最新的AF 第三方框架，可惜了没用cocoaPods,要不然就不用这个麻烦了，好不容易把所有相关的网络请求类都给移除了，但是在AFURLConnectionOperation这个类中既然还会报这样的错误，这下我真的受伤了，被逼无奈啊，难道非得让我把整个AF给弄通透了吗？好累，替换个SDk还能出这样的问题，想把出错的这个方法看了一下，最终，把isFinished的方法，对象换成了该类对象，暂时不报错了，运行起来也没问题，暂时OK，但不知道以后会不会有问题。。有待完善。
+
 #### 2016-1-2
 
 1.上传APP store 证书不匹配问题   WARNING ITMS-90076: "Potential Loss of Keychain Access. The previous version of software has an application-identifier value of ['GR3FK25RUR.com.chipsguide.app.carmp3.sagehuman.general'] and the new version of software being submitted has an application-identifier of ['AXTESR7SA4.com.chipsguide.app.carmp3.sagehuman.general']. This will result in a loss of keychain access."报这样的错误,一定要复查自己的所选择的证书和齿轮文件是否选对，一般都是选不对而导致的问题，
