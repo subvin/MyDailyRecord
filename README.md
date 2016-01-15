@@ -15,7 +15,7 @@ export PATH="/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platf
 
 79640A11C8D22589BD337496ABB8443581513846: no identity found Command /usr/bin/codesign failed with exit code 1
 
-问了百度。StackoverFlow ,好多人说，证书冲突了，如果该系统帐号下也有两个identifier为证书则删除过期的一个，再重启Xcode即可。这是一种方法。可我打开我的Xcode 钥匙串，并没有发现证书，于是在开发者中心重新下载了一个。编译-----------OK     问题得到了解决。
+问了百度。StackoverFlow ,好多人说，证书冲突了，如果该系统帐号下也有两个identifier为证书则删除过期的一个，再重启Xcode即可。这是一种方法。打开钥匙串，并没有发现证书，在开发者中心重新下载了一个用钥匙串打开。打包--------OK     问题得到了解决。
 
 
 
