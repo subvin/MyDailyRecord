@@ -2,9 +2,22 @@
 
 ### 仓库说明
 
-#### 2016-1-12
+#### 2016 -01-16
 
-1.前几天在替换喜马拉雅SDK的时候，AFNetworking中的一个类AFURLConnectionOperation或者（AFHttpClient）中有一个Block，第一个参数是，id类型的一个形参，它调了一个 isFinished 的方法 Multible methods miss match isFinished 我选中isFinished方法，点击右键，发现有两个类方法冲突，一个是XMAlbum,一个就是当前类本身，显然这个AF和喜马拉雅的网络请求产生了冲突。找遍了百度、stackOverFlow，也没找到问题在哪，问了下永何，它的AF比较新，我的是比较老的。他的没报这个问题，于是我试着替换一下第三方库。等换好了以后发现，新的第三方库是没有这个AFHttpClient这个类的，而我的所有的网络请求类都是直接或者间接的继承于这个类，这意味着我要把这些所有的网络请求都废除掉，取用最新的AF 第三方框架，可惜了没用cocoaPods,要不然就不用这个麻烦了，好不容易把所有相关的网络请求类都给移除了，但是在AFURLConnectionOperation这个类中既然还会报这样的错误，这下我真的受伤了，被逼无奈啊，难道非得让我把整个AF给弄通透了吗？好累，替换个SDk还能出这样的问题，想把出错的这个方法看了一下，最终，把isFinished的方法，对象换成了该类对象，暂时不报错了，运行起来也没问题，暂时OK，但不知道以后会不会有问题。。有待完善。
+1.上传APP，到APPStore,没有证书的情况，报了这样的错误，
+
+codesign /Users/Gaby/Library/Developer/Xcode/DerivedData/RoyalAppInspection-dthvtpxadkslqmhkwdpaqkyujscg/Build/Products/Debug-iphoneos/RoyalAppInspection.app
+cd /Users/Gaby/Desktop/RoyalAppInspection
+export CODESIGN_ALLOCATE=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/codesign_allocate
+export PATH="/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin
+
+/usr/bin/codesign --force --sign 79640A11C8D22589BD337496ABB8443581513846 --entitlements /Users/Gaby/Library/Developer/Xcode/DerivedData/RoyalAppInspection-dthvtpxadkslqmhkwdpaqkyujscg/Build/Intermediates/RoyalAppInspection.build/Debug-iphoneos/RoyalAppInspection.build/RoyalAppInspection.app.xcent /Users/Gaby/Library/Developer/Xcode/DerivedData/RoyalAppInspection-dthvtpxadkslqmhkwdpaqkyujscg/Build/Products/Debug-iphoneos/RoyalAppInspection.app
+
+79640A11C8D22589BD337496ABB8443581513846: no identity found Command /usr/bin/codesign failed with exit code 1
+
+问了百度。StackoverFlow ,好多人说，证书冲突了，如果该系统帐号下也有两个identifier为证书则删除过期的一个，再重启Xcode即可。这是一种方法。可我打开我的Xcode 钥匙串，并没有发现证书，于是在开发者中心重新下载了一个。编译-----------OK     问题得到了解决。
+
+
 
 #### 2016-1-2
 
