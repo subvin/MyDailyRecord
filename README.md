@@ -10,6 +10,49 @@
 
 解决方法：用其它图片替换了一下 ，显示出来了，再找了下那张图片的路径和不显示的图片的路径，惊奇的发现这个图片不是在同一个相同的文件夹下，把不显示的图片拖到项目工程图片主目录，OK!问题得到解决。
 
+2、类型安全转换的BUG
+
+问题描述：宝宝点读已读书籍列表界面，需要对书籍的阅读次数对书籍进行从大到小的排序，由于对iOS里面的枚举器排序用得不好，怎么用的不管用，最后选择了用最原始最简单的排序---选择排序进行。原先代码是这样的
+//选择排序
+            NSMutableArray *array = [[NSMutableArray arrayWithArray:object] mutableCopy];
+            int index=0;
+            for (int i = 0 ; i < array.count - 1; i ++) {
+                index = i;
+                for (int j = i + 1; j < array.count; j ++) {
+                    TRPNoteMainModel *obj1 = array[index];
+                    TRPNoteMainModel *obj2 = array[j];
+                    if ([obj1.readcount intValue] < [obj2.readcount intValue]) {
+                        index = j;
+                    }
+                }
+                if (index != i) {
+                    [array exchangeObjectAtIndex:index withObjectAtIndex:i];
+                }
+            }
+新注册了一个新的账号，由于还没有阅读任何书籍，所得到的array的长度为0，加载图标停住了，然后应用再也走不了了。
+
+问题解决：经过断点调试，发现第二层（里面那层）怎么都走不到那里去，外面的循环怎么都出不来；最后我是这么解决的
+NSMutableArray *array = [[NSMutableArray arrayWithArray:object] mutableCopy];
+            //选择排序
+            int index = 0;
+            int count = (int)array.count;
+            for (int i = 0 ; i < count - 1; i ++) {
+                index = i;
+                for (int j = i + 1; j < count; j ++) {
+                    TRPNoteMainModel *obj1 = array[index];
+                    TRPNoteMainModel *obj2 = array[j];
+                    if ([obj1.readcount intValue] < [obj2.readcount intValue]) {
+                        index = j;
+                    }
+                }
+                if (index != i) {
+                    [array exchangeObjectAtIndex:index withObjectAtIndex:i];
+                }
+            }
+            
+解释：array.count 是一个无符号的long类型 array.count = 0,在内存中四个字节全部都是0，其中第一位不是符号位，减掉 1 就是加上（-1），而（-1）在内存中的各个比特都是1，当执行 array.count - 1 的时候，这个结果相减的结果会变成一个最大的无符号数，然后这个循环就一直的进行,知道执行完这个最大的数的次数后才终止。
+鉴于此，在往后的编码规范中应该多注意点类型安全的转换，
+
 
 #### 2016-01-19
 
